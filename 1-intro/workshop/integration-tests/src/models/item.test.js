@@ -6,10 +6,13 @@ const validDate = new Date();
 const updatedName = "updatedName";
 
 //Comme mongoose nous posait des probleme j'ai écrit des tests avec comme Bdd un object Json : ITEMS et sa liste d'items
+// (Nous avons finalement réussi à faire les tests avec mangoose voir la fin du fichier)
+
 let ITEMS = {
     "items" : 
         [
-            { "id": "1qz56d4q6d1qz6d1q",
+            { 
+                "id": "1qz56d4q6d1qz6d1q",
                 "name" : "nom de base",
                 "date": Date.now()
             }
@@ -65,4 +68,35 @@ it("ItemDelete" , () => {
     let deleted =  ITEMS.items.find(i => i.id === randomId);
     expect(deleted).toBe(undefined)
 
+})
+
+
+/**
+ * Après explication de l'intervenant nous avons réécrit les tests avec l'utilisation de la bdd mongoose
+ */
+
+const mongoose = require('mongoose');
+const Item = require('./Item.js');
+
+// Connect to MongoDB
+mongoose.connect('mongodb://mongo:27017/docker-node-mongo', { useNewUrlParser: true })
+.then(() => console.log('MongoDB Connected (TESTS)'))
+.catch(err => console.log(err));
+
+it("Item" , async () => {
+    //Creation
+    const item = new Item({name: 'test'});
+    expect(item._id).toBeDefined();
+    expect(item.name).toBeDefined();
+    expect(item.date).toBeDefined();
+
+    const res = await item.save();
+    expect(res._id).toBe(item._id);
+    expect(res.name).toBe(item.name);
+    expect(res.date).toBe(item.date);
+
+    //Delete
+    await Item.deleteOne({ _id:item._id});
+    const resDelete = await Item.findById(item._id);
+    expect(resDelete).toBe(null);
 })

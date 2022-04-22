@@ -1,7 +1,11 @@
 class Item {
   constructor(name, sellIn, quality){
+    if(quality < 0)
+      quality = 0
+    if(quality > 50)
+      quality = 50
     this.name = name;
-    this.sellIn = sellIn;
+    this.sellIn = name == "Sulfuras" ? undefined : sellIn;
     this.quality = quality;
   }
 }
@@ -12,6 +16,7 @@ class Shop {
   }
   updateQuality() {
     for (let i = 0; i < this.items.length; i++) {
+      
       if (this.items[i].name != 'Aged Brie' && this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
         if (this.items[i].quality > 0) {
           if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {

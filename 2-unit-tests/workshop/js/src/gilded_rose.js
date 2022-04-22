@@ -24,34 +24,39 @@ class Shop {
   updateQuality() {
     this.items.forEach(item => {
 
-      if (item.name == AGED_BRIE)
-      {
-        if(item.quality < QUALITY_MAX)
-          item.quality++;
-      }
-      else if (item.name == BACKSTAGE_PASSES)
-      {
-        if(item.quality < QUALITY_MAX) {
-          if (item.sellIn <= 0)
-            item.quality = 0
-          else if (item.sellIn <= 5)
-            item.quality += 3;
-          else if (item.sellIn <= 10)
-            item.quality += 2;
-          else
-            item.quality ++;
-        }
-      }
-      else if (item.name != SULFURAS && item.quality > 0) 
-      {
-        let conjured = item.name == CONJURED ? 2 : 1;
+      switch(item.name) {
+        
+        case AGED_BRIE :
+          if(item.quality < QUALITY_MAX)
+            item.quality++;
+          break;
 
-        if (item.sellIn > 0)
-          item.quality -= 1 * conjured;
-        else
-          item.quality -= 2 * conjured;
-      }
+        case BACKSTAGE_PASSES :
+          if(item.quality < QUALITY_MAX) 
+          {
+            if (item.sellIn <= 0)
+              item.quality = 0
+            else if (item.sellIn <= 5)
+              item.quality += 3;
+            else if (item.sellIn <= 10)
+              item.quality += 2;
+            else
+              item.quality ++;
+          }
+          break;
 
+        case SULFURAS :
+          break;
+
+        default :
+          if (item.quality > 0) 
+          {
+            let conjured = item.name == CONJURED ? 2 : 1;
+            item.quality -= item.sellIn > 0 ? 1 * conjured : 2 * conjured ;
+          }
+          break;
+      }
+      
       if (item.name != SULFURAS)
         item.sellIn--;
     });

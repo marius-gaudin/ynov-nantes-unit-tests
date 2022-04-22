@@ -81,20 +81,125 @@ describe("Gilded Rose", function() {
 // - Tester que la qualité n'est jamais négative
 // - Tester une fois la date de péremption est passée que la qualité se dégrade deux fois plus rapidement
 
+//
+describe("Sulfuras quality", function() {
+  it("should not change", function() {
+    const gildedRose = new Shop([new Item("Sulfuras, Hand of Ragnaros", 10, 2)]);
 
-
-
-
-
+    const items1 = gildedRose.updateQuality();
+    expect(items1[0].quality).toBe(2);
+  });
+});
 
 // A Tester avec un item qui est 'Aged Brie' :
-// - Tester que la qualité augmente de 1 à chaque appel
-// - Tester que la qualité n'est jamais supérieur à 50
+describe("Aged Brie quality", function() {
+
+  // - Tester que la qualité augmente de 1 à chaque appel
+  it("should increase", function() {
+    const gildedRose = new Shop([new Item("Aged Brie", 10, 2)]);
+
+    const items1 = gildedRose.updateQuality();
+    expect(items1[0].quality).toBe(3);
+
+    const items2 = gildedRose.updateQuality();
+    expect(items2[0].quality).toBe(4);
+  });
+
+  // - Tester que la qualité n'est jamais supérieur à 50
+  it("must not exceed 50", function() {
+    const gildedRose = new Shop([new Item("Aged Brie", 10, 49)]);
+
+    const items1 = gildedRose.updateQuality();
+    expect(items1[0].quality).toBe(50);
+
+    const items2 = gildedRose.updateQuality();
+    expect(items2[0].quality).toBe(50);
+
+    const items3 = gildedRose.updateQuality();
+    expect(items3[0].quality).toBe(50);
+  });
+
+});
 
 // A Tester avec un item qui est 'Backstage passes' :
-// - Tester que la qualité augmente de 1 à chaque appel si écart avec la date > 10
-// - Tester que la qualité augmente de 2 à chaque appel si écart avec la date < 10 et > 5
-// - Tester que la qualité augmente de 3 à chaque appel si écart avec la date < 5
-// - Tester que la qualité est à 0 quand la date est dépassé
+describe("Backstage passes quality", function() {
+
+  const gildedRose = new Shop([new Item("Backstage passes to a TAFKAL80ETC concert", 12, 2)]);
+
+  // - Tester que la qualité augmente de 1 à chaque appel si écart avec la date > 10
+  it("should increase (+1 if sellIn >= 10)", function() {
+    const items1 = gildedRose.updateQuality();
+    expect(items1[0].quality).toBe(3);
+
+    const items2 = gildedRose.updateQuality();
+    expect(items2[0].quality).toBe(4);
+  });
+
+  // - Tester que la qualité augmente de 2 à chaque appel si écart avec la date < 10 et > 5
+  it("should increase (+2 if sellIn < 10 and sellIn >= 5)", function() {
+    const items1 = gildedRose.updateQuality();
+    expect(items1[0].quality).toBe(6);
+
+    const items2 = gildedRose.updateQuality();
+    expect(items2[0].quality).toBe(8);
+
+    const items3 = gildedRose.updateQuality();
+    expect(items3[0].quality).toBe(10);
+
+    const items4 = gildedRose.updateQuality();
+    expect(items4[0].quality).toBe(12);
+
+    const items5 = gildedRose.updateQuality();
+    expect(items5[0].quality).toBe(14);
+  });
+
+  // - Tester que la qualité augmente de 3 à chaque appel si écart avec la date < 5
+  it("should increase (+3 if sellIn < 5 and >= 0)", function() {
+    const items1 = gildedRose.updateQuality();
+    expect(items1[0].quality).toBe(17);
+
+    const items2 = gildedRose.updateQuality();
+    expect(items2[0].quality).toBe(20);
+
+    const items3 = gildedRose.updateQuality();
+    expect(items3[0].quality).toBe(23);
+
+    const items4 = gildedRose.updateQuality();
+    expect(items4[0].quality).toBe(26);
+
+    const items5 = gildedRose.updateQuality();
+    expect(items5[0].quality).toBe(29);
+  });
+
+  // - Tester que la qualité est à 0 quand la date est dépassé
+  it("must be 0 (if sellIn < 0)", function() {
+    const items1 = gildedRose.updateQuality();
+    expect(items1[0].quality).toBe(0);
+
+    const items2 = gildedRose.updateQuality();
+    expect(items2[0].quality).toBe(0);
+  });
+
+});
 
 // Tester avec plusieurs items
+describe("Many Items", function() {
+
+  it("should be correct", function() {
+    const gildedRose = new Shop([
+                                  new Item("test1", 12, 2),
+                                  new Item("test2", 5, 11),
+                                  new Item("test3", 0, 6)
+                                ]);
+
+    const items1 = gildedRose.updateQuality();
+    expect(items1[0].quality).toBe(1);
+    expect(items1[1].quality).toBe(10);
+    expect(items1[2].quality).toBe(4);
+
+    expect(items1[0].sellIn).toBe(11);
+    expect(items1[1].sellIn).toBe(4);
+    expect(items1[2].sellIn).toBe(-1);
+  });
+
+});

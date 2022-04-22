@@ -2,18 +2,17 @@ const {Shop, Item} = require("../src/gilded_rose");
 
 describe("Gilded Rose", function() {
   it("should foo", function() {
-    const gildedRose = new Shop([new Item("fixme", 0, 0)]);
+    const gildedRose = new Shop([new Item("foo", 0, 0)]);
     const items = gildedRose.updateQuality();
-    expect(items[0].name).toBe("fixme");
+    expect(items[0].name).toBe("foo");
   });
-
 
   it("items are created with good values", function() {
     const gildedRose = new Shop([new Item("foo", 20, 0)]);
     const items = gildedRose.updateQuality();
     expect(items.length).toBe(1);
-    expect(items[0].sellIn).not.toBe(undefined);
-    expect(items[0].quality).not.toBe(undefined);
+    expect(items[0].sellIn).toBeDefined();
+    expect(items[0].quality).toBeDefined();
     expect(items[0].quality).toBeLessThan(50);
   });
 
@@ -22,16 +21,16 @@ describe("Gilded Rose", function() {
     expect(gildedRose.items[0].quality).toBe(50);
 
   });
-  it("items suylfuras has no sellIn", function() {
+  it("items sulfuras has no sellIn", function() {
     const gildedRose = new Shop([new Item("Sulfuras", 20, 51)]);
-    expect(gildedRose.items[0].sellIn).toBe(undefined);
+    expect(gildedRose.items[0].sellIn).toBeUndefined();
 
   });
 
   it("Item list can be empty", function() {
     const gildedRose = new Shop([]);
     expect(gildedRose).not.toBe(Error);
-
+    expect(gildedRose.items).toBeDefined();
   });
 
   it("item quality updating works", function() {
@@ -66,28 +65,12 @@ describe("Gilded Rose", function() {
 
 });
 
-// -- Item --
-// Tester que les éléments créé on bien une valeur sellIn
-// Tester que les éléments créé on bien une valeur quality et que ce n'est pas supérieur à 50
-// Tester que si 'Sulfuras' alors pas de date de péremption
-
-
-// -- Shop --
-// --- updateQuality ---
-// Tester pour une liste items vide (pas d'erreurs)
-
-// A Tester avec un item qui n'est ni 'Aged Brie' ni 'Sulfuras' ni 'Backstage passes' :
-// - Tester que la qualité diminue a chaque appel
-// - Tester que la qualité n'est jamais négative
-// - Tester une fois la date de péremption est passée que la qualité se dégrade deux fois plus rapidement
-
-//
 describe("Sulfuras quality", function() {
   it("should not change", function() {
-    const gildedRose = new Shop([new Item("Sulfuras, Hand of Ragnaros", 10, 2)]);
+    const gildedRose = new Shop([new Item("Sulfuras", 10, 2)]);
 
     const items1 = gildedRose.updateQuality();
-    expect(items1[0].quality).toBe(2);
+    expect(items1[0].quality).toBe(80);
   });
 });
 
@@ -124,9 +107,9 @@ describe("Aged Brie quality", function() {
 // A Tester avec un item qui est 'Backstage passes' :
 describe("Backstage passes quality", function() {
 
-  const gildedRose = new Shop([new Item("Backstage passes to a TAFKAL80ETC concert", 12, 2)]);
+  const gildedRose = new Shop([new Item("Backstage passes", 12, 2)]);
 
-  // - Tester que la qualité augmente de 1 à chaque appel si écart avec la date > 10
+  // - Tester que la qualité augmente de 1 à chaque appel si sellIn > 10
   it("should increase (+1 if sellIn >= 10)", function() {
     const items1 = gildedRose.updateQuality();
     expect(items1[0].quality).toBe(3);
@@ -135,7 +118,7 @@ describe("Backstage passes quality", function() {
     expect(items2[0].quality).toBe(4);
   });
 
-  // - Tester que la qualité augmente de 2 à chaque appel si écart avec la date < 10 et > 5
+  // - Tester que la qualité augmente de 2 à chaque appel si sellIn < 10 et >= 5
   it("should increase (+2 if sellIn < 10 and sellIn >= 5)", function() {
     const items1 = gildedRose.updateQuality();
     expect(items1[0].quality).toBe(6);
@@ -153,7 +136,7 @@ describe("Backstage passes quality", function() {
     expect(items5[0].quality).toBe(14);
   });
 
-  // - Tester que la qualité augmente de 3 à chaque appel si écart avec la date < 5
+  // - Tester que la qualité augmente de 3 à chaque appel si sellIn < 5
   it("should increase (+3 if sellIn < 5 and >= 0)", function() {
     const items1 = gildedRose.updateQuality();
     expect(items1[0].quality).toBe(17);
@@ -202,4 +185,15 @@ describe("Many Items", function() {
     expect(items1[2].sellIn).toBe(-1);
   });
 
+});
+
+describe("Conjured", function() {
+  it("quality reduce twice", function() {
+    const gildedRose = new Shop([new Item("Conjured", 1, 20)]);
+
+    const items1 = gildedRose.updateQuality();
+    expect(items1[0].quality).toBe(18);
+    const items2 = gildedRose.updateQuality();
+    expect(items2[0].quality).toBe(14);
+  });
 });

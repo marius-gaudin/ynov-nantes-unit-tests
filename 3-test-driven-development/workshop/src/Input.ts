@@ -1,10 +1,5 @@
- import {NmErrorType, LigneError, ChampError} from "../src/ErrorTypes";
-
-
-
-
- 
- type Char = '*' | '.' | "1" | "2" | "0" | "3" | "4" | "5" | "6" | "7" | "8";
+ import {NmErrorType, LigneError, ChampError} from "../src/ErrorTypes"; 
+ //type Char = '*' | '.' | "1" | "2" | "0" | "3" | "4" | "5" | "6" | "7" | "8";
 
 
  class Input {
@@ -45,19 +40,53 @@ class Champ{
     }
 
     Process(){
-        return [];
+        
+        for(let n = 0; n < this.nm.value[0]; n++) {
+            for(let m = 0; m < this.nm.value[1]; m++) {
+                if(this.Lignes[n].chars[m] !== "*") {
+                    let nb = 0;
+
+                    if(n > 0 && m > 0 && this.Lignes[n-1].chars[m-1] === "*")
+                        nb++;
+                    
+                    if(n > 0 && this.Lignes[n-1].chars[m] === "*")
+                        nb++;
+                    
+                    if(n > 0 && m+1 < this.nm.value[1] && this.Lignes[n-1].chars[m+1] === "*")
+                        nb++;
+                    
+                    if(n+1 < this.nm.value[0] && m > 0 && this.Lignes[n+1].chars[m-1] === "*")
+                        nb++;
+
+                    if(n+1 < this.nm.value[0] && this.Lignes[n+1].chars[m] === "*")
+                        nb++;
+
+                    if(n+1 < this.nm.value[0] && m+1 < this.nm.value[1] && this.Lignes[n+1].chars[m+1] === "*")
+                        nb++;
+                    
+                    if(m > 0 && this.Lignes[n].chars[m-1] === "*")
+                        nb++;
+                    
+                    if(m+1 < this.nm.value[1] && this.Lignes[n].chars[m+1] === "*")
+                        nb++;
+
+                    this.Lignes[n].chars[m] = nb.toString();
+                }
+            }
+        }
+        return this;
     }
    
 
 }
 
 class Ligne{
-   chars : Char[];
-   constructor(chars:Char[]){
+   chars : String[];
+   constructor(chars:String[]){
     this.chars = chars;
    }
 }
 
 
 
-export {Input, Ligne, Champ, Char, Nm};
+export {Input, Ligne, Champ, Nm};

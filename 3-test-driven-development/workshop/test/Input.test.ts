@@ -1,4 +1,4 @@
-import { Input, Ligne, Nm, Champ, Char } from "../src/Input";
+import { Input, Ligne, Nm, Champ } from "../src/Input";
 import {NmErrorType, ChampError, LigneError} from "../src/ErrorTypes";
 
 // l'objet Champs prends deux paramètre
@@ -77,9 +77,9 @@ describe("Mine Sweeper", function() {
     it("Les lignes ne doivent pas avoir autre chose que m largeur", function() {
       let num:number[] = [3, 25];
       let nm:Nm = new Nm(num);
-      let chars1:Char[] = [".", ".", ".", "*"]
-      let chars2:Char[] = [".", "*", ".", "*"]
-      let chars3:Char[] = [".", ".", ".", "*"]
+      let chars1:String[] = [".", ".", ".", "*"]
+      let chars2:String[] = [".", "*", ".", "*"]
+      let chars3:String[] = [".", ".", ".", "*"]
       let lignes:Ligne[] = [
           new Ligne(chars1),
           new Ligne(chars2),
@@ -96,21 +96,20 @@ describe("Mine Sweeper", function() {
         let expected:Champ = createValidProcessChamp();
         expect(champ.Process()).toStrictEqual(expected);
 
-     });
+        let champ1: Champ= createValidChamp1();
+        let expected1:Champ = createValidProcessChamp1();
+        expect(champ1.Process()).toStrictEqual(expected1);
 
-     
+     }); 
     
    });
-
-
-
   
   function createValidChamp(){
     let num:number[] = [3, 4];
       let nm:Nm = new Nm(num);
-      let chars1:Char[] = [".", ".", ".", "*"]
-      let chars2:Char[] = [".", "*", ".", "."]
-      let chars3:Char[] = [".", ".", ".", "."]
+      let chars1:String[] = [".", ".", ".", "*"]
+      let chars2:String[] = [".", "*", ".", "."]
+      let chars3:String[] = [".", ".", ".", "."]
       let lignes:Ligne[] = [
           new Ligne(chars1),
           new Ligne(chars2),
@@ -120,20 +119,54 @@ describe("Mine Sweeper", function() {
       return new Champ(nm, lignes);
   }
 
-
-
-
-
   function createValidProcessChamp(){
     let num:number[] = [3, 4];
       let nm:Nm = new Nm(num);
-      let chars1:Char[] = ["1", "1", "2", "*"]
-      let chars2:Char[] = ["1", "*", "2", "1"]
-      let chars3:Char[] = ["1", "1", "1", "0"]
+      let chars1:String[] = ["1", "1", "2", "*"]
+      let chars2:String[] = ["1", "*", "2", "1"]
+      let chars3:String[] = ["1", "1", "1", "0"]
       let lignes:Ligne[] = [
           new Ligne(chars1),
           new Ligne(chars2),
           new Ligne(chars3)
+      ]
+
+      return new Champ(nm, lignes);
+  }
+
+  function createValidChamp1(){
+    let num:number[] = [5, 3];
+      let nm:Nm = new Nm(num);
+      let chars1:String[] = [".", ".", "."]
+      let chars2:String[] = [".", ".", "."]
+      let chars3:String[] = [".", ".", "*"]
+      let chars4:String[] = ["*", ".", "."]
+      let chars5:String[] = [".", ".", "."]
+      let lignes:Ligne[] = [
+          new Ligne(chars1),
+          new Ligne(chars2),
+          new Ligne(chars3),
+          new Ligne(chars4),
+          new Ligne(chars5)
+      ]
+
+      return new Champ(nm, lignes);
+  }
+
+  function createValidProcessChamp1(){
+    let num:number[] = [5, 3];
+      let nm:Nm = new Nm(num);
+      let chars1:String[] = ["0", "0", "0"]
+      let chars2:String[] = ["0", "1", "1"]
+      let chars3:String[] = ["1", "2", "*"]
+      let chars4:String[] = ["*", "2", "1"]
+      let chars5:String[] = ["1", "1", "0"]
+      let lignes:Ligne[] = [
+        new Ligne(chars1),
+        new Ligne(chars2),
+        new Ligne(chars3),
+        new Ligne(chars4),
+        new Ligne(chars5)
       ]
 
       return new Champ(nm, lignes);

@@ -1,3 +1,5 @@
+ import {NmErrorType} from "../src/ErrorTypes";
+ 
  class Input {
     champs: Champ[];
 
@@ -10,8 +12,9 @@
 class Nm {
     value: number[]
     constructor(value: number[]){
-
-        this.value =value;
+        if(value.length < 2)
+            throw new Error(NmErrorType.INVALIDLENGTH.message);
+        this.value = value;
     }
 }
 class Champ{

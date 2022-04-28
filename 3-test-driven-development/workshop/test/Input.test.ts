@@ -1,4 +1,5 @@
 import { Input, Nm } from "../src/Input";
+import {NmErrorType} from "../src/ErrorTypes";
 
 // l'objet Champs prends deux paramètre
 // caracter, input, champs, ligne, nm
@@ -11,8 +12,8 @@ import { Input, Nm } from "../src/Input";
 describe("Gilded Rose", function() {
     it("la première ligne doit contenir deux chiffres", function() {
         let num:number[] = [1]
-        let premièreligne:Nm = new Nm(num);
-        expect(premièreligne).toThrow(Error);
+        //let premièreligne:Nm =  new Nm(num);
+        expect(new Nm(num)).toThrow(NmErrorType.INVALIDLENGTH.message);
     });
 
     it("les chiffrse ne sont pas negatif", function() {

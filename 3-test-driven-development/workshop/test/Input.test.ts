@@ -74,33 +74,55 @@ describe("Mine Sweeper", function() {
       // champ.Lignes.count.devrait.etre(champ.nm[0])
     });*/
 
-    it("Les lignes ne doivent pas avoir autre chose que m largeur", function() {
-      let num:number[] = [3, 25];
-      let nm:Nm = new Nm(num);
-      let chars1:String[] = [".", ".", ".", "*"]
-      let chars2:String[] = [".", "*", ".", "*"]
-      let chars3:String[] = [".", ".", ".", "*"]
-      let lignes:Ligne[] = [
-          new Ligne(chars1),
-          new Ligne(chars2),
-          new Ligne(chars3)
-      ] 
-      //when : 
-      expect(() => {new Champ(nm, lignes)}).toThrow(ChampError.INVALIDLENGTH);
+      it("Les lignes ne doivent pas avoir autre chose que m largeur", function() {
+        let num:number[] = [3, 25];
+        let nm:Nm = new Nm(num);
+        let chars1:String[] = [".", ".", ".", "*"]
+        let chars2:String[] = [".", "*", ".", "*"]
+        let chars3:String[] = [".", ".", ".", "*"]
+        let lignes:Ligne[] = [
+            new Ligne(chars1),
+            new Ligne(chars2),
+            new Ligne(chars3)
+        ] 
+        //when : 
+        expect(() => {new Champ(nm, lignes)}).toThrow(ChampError.INVALIDLENGTH);
 
+      });
 
-     });
+      it("La méthode process retourne un input processé", function() {
+          let champ: Champ= createValidChamp();
+          let expected:Champ = createValidProcessChamp();
 
-     it("La méthode process retourne un input processé", function() {
+          console.log(champ.toString());
+          expect(champ.Process()).toEqual(expected);
+          console.log(champ.toString());
+
+          let champ1: Champ= createValidChamp1();
+          let expected1:Champ = createValidProcessChamp1();
+
+          console.log(champ1.toString());
+          expect(champ1.Process()).toEqual(expected1);
+          console.log(champ1.toString());
+
+      }); 
+
+      it("toString", function() {
         let champ: Champ= createValidChamp();
-        let expected:Champ = createValidProcessChamp();
-        expect(champ.Process()).toStrictEqual(expected);
-
         let champ1: Champ= createValidChamp1();
-        let expected1:Champ = createValidProcessChamp1();
-        expect(champ1.Process()).toStrictEqual(expected1);
+        let input = new Input([champ, champ1]);
+        
+        champ.Process();
+        champ1.Process();
 
-     }); 
+        let res = input.toString();
+        let correctRes = 
+        'Field #1:\n112*\n1*21\n1110\n\nField #2:\n000\n011\n12*\n*21\n110\n\n';
+
+        expect(res).toEqual(correctRes);
+        console.log(res);
+
+      }); 
     
    });
   

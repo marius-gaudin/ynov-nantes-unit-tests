@@ -1,16 +1,24 @@
- import {NmErrorType, LigneError, ChampError} from "../src/ErrorTypes"; 
- //type Char = '*' | '.' | "1" | "2" | "0" | "3" | "4" | "5" | "6" | "7" | "8";
+import {NmErrorType, LigneError, ChampError} from "../src/ErrorTypes"; 
+//type Char = '*' | '.' | "1" | "2" | "0" | "3" | "4" | "5" | "6" | "7" | "8";
 
-
- class Input {
+class Input {
     champs: Champ[];
 
-   constructor( champs : Champ[]) {
-
+    constructor( champs : Champ[]) {
         this.champs = champs;
-   }
+    }
 
+    toString() {
+        let str = '';
+        this.champs.forEach((champ, i) => {
+            str += 'Field #'+(i+1)+':\n';
+            str += champ.toString();
+            str += '\n';
+        });
+        return str;
+    }
 }
+
 class Nm {
     value: number[]
     constructor(value: number[]){
@@ -39,36 +47,39 @@ class Champ{
         this.Lignes = Lignes;
     }
 
-    Process(){
+    toString() {
+        let str = '';
+        this.Lignes.forEach(n => {
+            str += n.chars.join('');
+            str += '\n';
+        });
+        return str;
+    }
+
+    Process() {
         
         for(let n = 0; n < this.nm.value[0]; n++) {
             for(let m = 0; m < this.nm.value[1]; m++) {
-                if(this.Lignes[n].chars[m] !== "*") {
+                if(this.Lignes[n].chars[m] === ".") {
                     let nb = 0;
 
-                    if(n > 0 && m > 0 && this.Lignes[n-1].chars[m-1] === "*")
-                        nb++;
-                    
-                    if(n > 0 && this.Lignes[n-1].chars[m] === "*")
-                        nb++;
-                    
-                    if(n > 0 && m+1 < this.nm.value[1] && this.Lignes[n-1].chars[m+1] === "*")
-                        nb++;
-                    
-                    if(n+1 < this.nm.value[0] && m > 0 && this.Lignes[n+1].chars[m-1] === "*")
-                        nb++;
+                    let check = [
+                        [n-1, m-1], //TOP LEFT
+                        [n-1, m],   //TOP
+                        [n-1, m+1], //TOP RIGHT
+                        [n+1, m-1], //BOTTOM LEFT
+                        [n+1, m],   //BOTTOM
+                        [n+1, m+1], //TBOTTOM RIGHT
+                        [n, m-1],   //LEFT
+                        [n, m+1],   //RIGHT
+                    ];
 
-                    if(n+1 < this.nm.value[0] && this.Lignes[n+1].chars[m] === "*")
-                        nb++;
-
-                    if(n+1 < this.nm.value[0] && m+1 < this.nm.value[1] && this.Lignes[n+1].chars[m+1] === "*")
-                        nb++;
-                    
-                    if(m > 0 && this.Lignes[n].chars[m-1] === "*")
-                        nb++;
-                    
-                    if(m+1 < this.nm.value[1] && this.Lignes[n].chars[m+1] === "*")
-                        nb++;
+                    check.forEach(position => {
+                        if(typeof this.Lignes[position[0]] !== 'undefined' && 
+                           typeof this.Lignes[position[0]].chars[position[1]] !== 'undefined' && 
+                           this.Lignes[position[0]].chars[position[1]] === "*")
+                            nb++;
+                    })
 
                     this.Lignes[n].chars[m] = nb.toString();
                 }
@@ -86,7 +97,5 @@ class Ligne{
     this.chars = chars;
    }
 }
-
-
 
 export {Input, Ligne, Champ, Nm};

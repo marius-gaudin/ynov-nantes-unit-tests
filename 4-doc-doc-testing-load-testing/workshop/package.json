@@ -18,7 +18,7 @@
     "codeceptjs": "^3.3.2",
     "express": "^4.16.4",
     "express-openapi": "^11.0.0",
-    "jest": "^28.0.2",
+    "jest": "^28.0.3",
     "mongoose": "^5.13.14",
     "node-fetch": "^3.2.4",
     "nodemon": "^1.18.9",

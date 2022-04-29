@@ -144,10 +144,7 @@ const options = {
 
 app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(options));
 
-
-
 app.use(express.static(__dirname + '/public'));
-
 
 app.get('/todo', (req, res) => {
   ToDo.find()

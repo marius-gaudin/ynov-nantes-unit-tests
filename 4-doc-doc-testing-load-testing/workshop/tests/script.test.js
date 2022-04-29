@@ -28,17 +28,17 @@ describe("Test Unitaire", function() {
     });
 });
 
-// mongoose.connect(DB_URI).then(() => {
-// });
+// const mockDB = require('./mockDB');
 
-// describe("Test d'Integration", function() {
+// before(async () => await mockDB.connect());
 
-//     it("addTODO", async function() {
-//         ToDo.deleteMany({});
-//         addTODO("TEST");
-//         const res = await ToDo.find();
-//         expect(res).toBe("TEST")
-//         ToDo.deleteMany({});
-//     });
-    
-// });
+describe("Test d'Integration", function() {
+
+    it("addTODO", async function() {
+        ToDo.deleteMany({});
+        addTODO("TEST");
+        const res = await ToDo.find();
+        expect(res).toBe("TEST")
+        ToDo.deleteMany({});
+    });
+});
